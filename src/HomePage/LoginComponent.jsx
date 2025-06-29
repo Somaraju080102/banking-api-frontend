@@ -10,9 +10,41 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import axios from "axios"
+import { useFormik } from "formik"
 import { Link } from "react-router-dom"
+import * as Yup from "yup"
 
 export default function LoginComponent() {
+
+  const formik=useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    onSubmit: async(values) => {
+      console.log(values);
+
+      try{
+        const response=await axios.post("http://localhost:8080/api/auth/login", values);
+        if(response.status === 200){
+          alert("Login successful");
+          // Redirect to home or dashboard
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+        alert("Login failed. Please try again.");
+      }
+    },
+    validationSchema:Yup.object({
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('Required'),
+      password: Yup.string()
+        .min(8, 'Must be at least 8 characters')
+        .required('Required'),
+    })
+  })
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-950">
     <Card className="w-full max-w-sm bg-amber-50">
@@ -26,16 +58,19 @@ export default function LoginComponent() {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <form>
+        <form onSubmit={formik.handleSubmit}> 
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
                 placeholder="m@example.com"
                 required
               />
+              <small className="text-red-700">{formik.errors.email}</small>
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -47,19 +82,19 @@ export default function LoginComponent() {
                   Forgot your password?
                 </a>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" onChange={formik.handleChange} value={formik.values.password} type="password" required />
+              <small className="text-red-700">{formik.errors.password}</small>
             </div>
           </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex-col gap-2">
+           <CardFooter className="flex-col gap-2">
         <Button type="submit" className="w-full">
           Login
         </Button>
-        {/* <Button variant="outline" className="w-full">
-          Login with Google
-        </Button> */}
+        
       </CardFooter>
+        </form>
+      </CardContent>
+     
     </Card>
     </div>
   )
