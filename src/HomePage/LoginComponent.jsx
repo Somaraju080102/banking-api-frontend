@@ -27,9 +27,13 @@ export default function LoginComponent() {
 
       try{
         const response=await axios.post("http://localhost:8080/api/auth/login", values);
+        const token =response.data.token;
+        localStorage.setItem("token", token);
+        console.log("Login successful:", response.data);
         if(response.status === 200){
           alert("Login successful");
           // Redirect to home or dashboard
+          console.log("Toekn:", token);
         }
       } catch (error) {
         console.error("Error during login:", error);

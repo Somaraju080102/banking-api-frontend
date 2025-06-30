@@ -27,10 +27,13 @@ export default function SiginComponent() {
     onSubmit: async (values) => {
       console.log(values);
       try{
-        const response=await axios.post("http://localhost:8080/api/auth/login",values);
+        const response=await axios.post("http://localhost:8080/api/auth/signup",values);
         if(response.status===200){
           alert("Signin successful");
           // Redirect to home or dashboard
+          const token = response.data.token;
+          localStorage.setItem("token", token);
+          console.log("Signin successful:", response.data);
         }
       } catch (error) {
         console.error("Error during signin:", error);
