@@ -12,10 +12,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import axios from "axios"
 import { useFormik } from "formik"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import * as Yup from "yup"
 
 export default function LoginComponent() {
+
+  const navigate=useNavigate();
+  
 
   const formik=useFormik({
     initialValues: {
@@ -31,9 +34,10 @@ export default function LoginComponent() {
         localStorage.setItem("token", token);
         console.log("Login successful:", response.data);
         if(response.status === 200){
-          alert("Login successful");
+          // alert("Login successful");
           // Redirect to home or dashboard
           console.log("Toekn:", token);
+          navigate("/bank");
         }
       } catch (error) {
         console.error("Error during login:", error);

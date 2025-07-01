@@ -12,12 +12,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import axios from "axios"
 import { useFormik } from "formik"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import * as Yup from "yup"
 
 
 export default function SiginComponent() {
 
+
+  const navigate=useNavigate();
   const formik=useFormik({
     initialValues: {
       name: '',
@@ -29,12 +31,14 @@ export default function SiginComponent() {
       try{
         const response=await axios.post("http://localhost:8080/api/auth/signup",values);
         if(response.status===200){
-          alert("Signin successful");
+          // alert("Signin successful");
           // Redirect to home or dashboard
           const token = response.data.token;
           localStorage.setItem("token", token);
           console.log("Signin successful:", response.data);
+          navigate("/login");
         }
+
       } catch (error) {
         console.error("Error during signin:", error);
         alert("Signin failed. Please try again.");
