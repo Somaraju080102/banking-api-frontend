@@ -15,9 +15,19 @@ import { useFormik } from "formik"
 import { Link, useNavigate } from "react-router-dom"
 import * as Yup from "yup"
 
+import { useContext } from "react"
+import { Context } from "../../ContextSetup/UserContext"; // Adjust the import path as needed
+
+
 export default function LoginComponent() {
 
   const navigate=useNavigate();
+
+  const {handlelogin}=useContext(Context);
+  
+  const {handlelogout}=useContext(Context);
+
+
   
 
   const formik=useFormik({
@@ -38,6 +48,7 @@ export default function LoginComponent() {
           // Redirect to home or dashboard
           console.log("Toekn:", token);
           navigate("/bank");
+          handlelogin("Somaraju");
         }
       } catch (error) {
         console.error("Error during login:", error);
