@@ -8,11 +8,11 @@ import * as Yup from 'yup';
 
 export default function CreateAccountComponent() {
 
-    const token = localStorage.getItem('token');
-    if(token){
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        const token = localStorage.getItem('token');
+        if(token){
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    }
+        }
 
   const formik = useFormik({
     initialValues: {
